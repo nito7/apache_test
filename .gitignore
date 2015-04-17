@@ -1,4 +1,5 @@
-mod_root_api.la
-mod_root_api.lo
-mod_root_api.o
-mod_root_api.slo
+*.la
+*.lo
+*.o
+*.slo
+.libs
