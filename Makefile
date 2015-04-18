@@ -37,7 +37,7 @@ mod_rook_api.so: mod_rook_api.o
 
 # install the shared object file into Apache 
 install: all
-	$(APXS) -i -a -n 'cpphello' mod_rook_api.so
+	$(APXS) -i -a -n 'rook_api' mod_rook_api.so
 
 # display the apxs variables
 check_apxs_vars:

@@ -11,23 +11,23 @@
 #include "http_protocol.h"
 #include <string>
 
-extern "C" module AP_MODULE_DECLARE_DATA cpphello_module;
+extern "C" module AP_MODULE_DECLARE_DATA rook_api_module;
 
 typedef struct {
-    char *hellomessage;
-} cpphello_dir_config;
+    char *message;
+} rook_api_dir_config;
 
-static void *cpphello_create_dir_config(apr_pool_t *p, char *path)
+static void *rook_api_create_dir_config(apr_pool_t *p, char *path)
 {
-    cpphello_dir_config *cfg = (cpphello_dir_config *)apr_pcalloc(p, sizeof(cpphello_dir_config));
-    cfg->hellomessage = (char *)"こんにちは！";
+    rook_api_dir_config *cfg = (rook_api_dir_config *)apr_pcalloc(p, sizeof(rook_api_dir_config));
+    cfg->message = (char *)"こんにちは！";
     return cfg;
 }
 
-static int cpphello_handler(request_rec *r)
+static int rook_api_handler(request_rec *r)
 {
-    cpphello_dir_config *cfg = (cpphello_dir_config *) ap_get_module_config(r->per_dir_config, &cpphello_module);
-    std::string messagetosend = std::string("<html><p>") + std::string(cfg->hellomessage) + std::string("</p></html>\n");
+    rook_api_dir_config *cfg = (rook_api_dir_config *) ap_get_module_config(r->per_dir_config, &rook_api_module);
+    std::string messagetosend = std::string("<html><p>") + std::string(cfg->message) + std::string("</p></html>\n");
     r->content_type = "text/html";
     if (!r->header_only) {
       ap_rputs(messagetosend.c_str(), r);
@@ -37,13 +37,13 @@ static int cpphello_handler(request_rec *r)
 
 static void register_hooks(apr_pool_t *p)
 {
-  ap_hook_fixups(cpphello_handler,NULL,NULL,APR_HOOK_MIDDLE);
+  ap_hook_fixups(rook_api_handler,NULL,NULL,APR_HOOK_MIDDLE);
 }
 
 extern "C" {
-    module AP_MODULE_DECLARE_DATA cpphello_module = {
+    module AP_MODULE_DECLARE_DATA rook_api_module = {
     STANDARD20_MODULE_STUFF,
-    cpphello_create_dir_config,
+    rook_api_create_dir_config,
     NULL,
     NULL,
     NULL,
