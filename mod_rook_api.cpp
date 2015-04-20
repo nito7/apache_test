@@ -15,31 +15,19 @@
 
 extern "C" module AP_MODULE_DECLARE_DATA rook_api_module;
 
-typedef struct {
-    char *message;
-} rook_api_dir_config;
-
-static void *rook_api_create_dir_config(apr_pool_t *p, char *path)
-{
-    rook_api_dir_config *cfg = (rook_api_dir_config *)apr_pcalloc(p, sizeof(rook_api_dir_config));
-    cfg->message = (char *)"こんにちは！";
-    return cfg;
-}
-
 static int rook_api_handler(request_rec *r)
 {
-    rook_api_dir_config *cfg = (rook_api_dir_config *) ap_get_module_config(r->per_dir_config, &rook_api_module);
-    std::string messagetosend = std::string("<html><p>") + std::string(cfg->message) + std::string("</p><p>test</p></html>\n");
+    if (strcmp(r->handler, "rook_api") != 0) {
+      std::cerr << "handler isn't rook_api" << std::endl;
+      return DECLINED;
+    }
+
     r->content_type = "text/html";
     if (!r->header_only) {
-      /*
-      if (strcmp(r->handler, "rook_api") != 0) {
-        std::cerr << "handler isn't rook_api" << std::endl;
-        return OK;
-      }
-      */
-      std::cerr << "return OK" << std::endl;
-      ap_rputs(messagetosend.c_str(), r);
+      /* ここに処理を追加 */
+      std::string message = "hello world";
+      ap_rputs(message.c_str(), r);
+      std::cerr << r->handler << std::endl;
     }
     return OK;
 }
@@ -52,7 +40,7 @@ static void register_hooks(apr_pool_t *p)
 extern "C" {
     module AP_MODULE_DECLARE_DATA rook_api_module = {
     STANDARD20_MODULE_STUFF,
-    rook_api_create_dir_config,
+    NULL,
     NULL,
     NULL,
     NULL,
