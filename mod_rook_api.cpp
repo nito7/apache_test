@@ -27,7 +27,6 @@ static int rook_api_handler(request_rec *r)
       /* ここに処理を追加 */
       std::string message = "hello world";
       ap_rputs(message.c_str(), r);
-      std::cerr << r->handler << std::endl;
     }
     return OK;
 }
